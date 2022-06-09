@@ -1,0 +1,12 @@
+1)
+
+There is the document which is the out most element in the structure.
+
+Inside document there is the root element(html) element.
+
+Within root element, there are two separate elements, i) head element and ii) body element.
+
+i. Within head element there is one h1 element with a text node with value "Title".
+
+ii. Within body element there are two separate input elements, the first input has two attribute named type and name, 
+the second input element has two attribute named type and value. So attribute values will be different as provided in the html code.

@@ -1,0 +1,8 @@
+3)
+
+Difference between innerText and textContent is innerText keeps the style of the element in consideration,
+where textContent does not consider styling of a particular div.
+
+So suppose for this element <h1 style="display:none;">Hello</h1>, if we do const h = document.getElementByTagName('h1') 
+and then do console.log(h.innerText), then the result will be void as it considers style, since style="display:none", 
+it won't show the result but console.log(h.textContent) will show all the content irrespective of style.
