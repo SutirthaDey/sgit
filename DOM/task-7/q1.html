@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <title>Item Lister</title>
+</head>
+<body>
+  <header id="main-header" class="bg-success text-white p-4 mb-3">
+    <div class="container">
+      <h1 id="header-title">Item Lister <span style="display:none">123</span></h1>
+    </div>
+  </header>
+  <div class="container">
+   <div id="main" class="card card-body">
+    <h2 class="title">Add Items</h2>
+    <form class="form-inline mb-3">
+      <input type="text" name="name" class="form-control mr-2">
+      <input type="submit" class="btn btn-dark" value="Submit">
+    </form>
+    <h2 class="title">Items</h2>
+    <ul id="items" class="list-group">
+      <li class="list-group-item">Item 1</li>
+      <li class="list-group-item">Item 2</li>
+      <li class="list-group-item">Item 3</li>
+      <li class="list-group-item">Item 4</li>
+    </ul>
+   </div>
+  </div>
+ <script>
+    const listItems = document.getElementById('items');
+
+    listItems.parentElement.style.backgroundColor="#ccc";
+
+    listItems.firstElementChild.innerText = "changed to new item-1";
+
+    console.log(listItems.lastChild);
+
+    const newli = document.createElement('li');
+    newli.className = 'list-group-item';
+    newli.appendChild(document.createTextNode('new item-5'));
+    listItems.appendChild(newli);
+
+    console.log(listItems.firstChild);
+
+    console.log(listItems.nextSibling);
+
+    console.log(listItems.nextElementSibling)
+
+    const h = document.createElement('h3');
+    h.appendChild(document.createTextNode('End'));
+    
+    const main = document.getElementById('main');
+    main.insertBefore(h,listItems.nextElementSibling);
+    console.log(listItems.nextElementSibling);
+
+    console.log(listItems.previousSibling);
+    listItems.previousElementSibling.textContent="Items Lister";
+
+    h.setAttribute('align','center');
+
+    const newh1 = document.createElement('h1');
+    newh1.appendChild(document.createTextNode('Hello'));
+    const header = document.getElementsByClassName('container')[0];
+
+    header.insertBefore(newh1,header.firstElementChild);
+
+    const newWord = document.createElement('li');
+    newWord.appendChild(document.createTextNode('Hello'));
+    newWord.className = 'list-group-item';
+    listItems.insertBefore(newWord,listItems.firstElementChild);
+
+ </script>
+</body>
+</html>
