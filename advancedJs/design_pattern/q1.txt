@@ -1,0 +1,5 @@
+1. this inside global scope
+2. this inside object
+3. this inside function
+4. this inside inner function
+5. this inside class
