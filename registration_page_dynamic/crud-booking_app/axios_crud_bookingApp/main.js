@@ -1,10 +1,21 @@
 const form = document.getElementById('my-form');
 
-const createPost = ({name,email})=>{
+const onDelete = (li,id)=>{
+ axios.delete(`https://crudcrud.com/api/f95614ed8854451db9fe1973069120f8/bookings/${id}`)
+ .then(()=> li.remove())
+ .catch((e)=>console.log(e));
+}
+
+const onEdit = (e)=>{
+
+}
+const createPost = ({_id,name,email})=>{
     const userList  = document.getElementById('items');
     const li  = document.createElement('li');
     const del = document.createElement('button');
     const edit = document.createElement('button');
+    del.addEventListener('click',(e)=>onDelete(li,_id));
+    edit.addEventListener('click',(e)=>onEdit(li,_id));
     const text = document.createTextNode(`${name}`);
     del.appendChild(document.createTextNode(`Delete`));
     edit.appendChild(document.createTextNode(`Edit`));
