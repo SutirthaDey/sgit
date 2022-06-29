@@ -1,0 +1,48 @@
+1. Explain the nodejs event driven architecture.
+
+The event loop architecture basically takes care of the event driven architecture. so suppose we 
+have created a server like:
+		
+    const http = require('http);
+
+	const reqListener = (req,res)=>{
+
+			console.log(req);
+
+    }
+
+		
+
+	const server = http.createServer(reqListener);
+
+	server.listen(4000);
+
+Now, the function reqListener acts as a event so whenever any event(request) happens, 
+this function gets executed and all of this is taken care of by event loop.
+
+	
+
+2. How can it basically scale to handle 1000 of requests a sec. What helps node JS even though it is single threaded?
+
+Nodejs can handle 1000 requests a sec because of it's event loop, 
+so event loop allows nodejs to run specific process in background so although nodejs is a 
+synchronous programming language but it can handle many request at a time. 
+Also it does some multi threading by leveraging the operating system.
+
+
+
+3. What does process.exit do?
+
+process.exit() terminates the event listener which basically listens for any req made to server, 
+hence no event listener means the server would stop.
+
+
+
+4. What does req.url , req.header and req.method contain?
+
+req.url contains the url from where the request was made, 
+req.header contains all the  information about the request header and req.method tells 
+the type of method used to made the req(GET,POST or PUT).
+
+
+
