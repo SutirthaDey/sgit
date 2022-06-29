@@ -1,0 +1,6 @@
+Stream: Stream is just a process of flow of data from the data source 
+to the buffer and from the buffer to the client.All these bits flow in a stream.
+
+Buffer: Transferring a big amount of data after converting it into small chunks of data. 
+These small chunks can be used simultaneously, without waiting for the whole amount of the data to download.
+For example - Watching a youtube video,without downloading the whole file.
