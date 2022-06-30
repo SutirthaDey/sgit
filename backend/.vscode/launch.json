@@ -13,7 +13,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/kickstarting nodeJs/createServer.js",
+            "program": "${workspaceFolder}/2. Express Framework/2. Intro to middlewares/add_product.js",
             "restart": true,
             "runtimeExecutable": "nodemon",
             "console": "integratedTerminal"
