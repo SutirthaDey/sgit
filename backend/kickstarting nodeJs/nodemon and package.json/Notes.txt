@@ -1,0 +1,10 @@
+nodemon: nodemon is used for restarting the server whenever we hit save after doing some modification.
+Because of nodemon we don't have to quit and restart the server everytime we do some modification.
+
+--save-dev installs a package in development mode, means it will be installed for only
+development purpose.
+--save installs a package in production mode, so this package can be used in production time.
+
+-g installs as global package.
+
+change the scripts in package.json by writing "start": "nodemon (server.js)"
