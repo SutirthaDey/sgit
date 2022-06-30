@@ -1,0 +1,34 @@
+1. Why are we using Express JS? Any reasons?
+
+Answer: Express JS is a framework with a lot of helper functions, which helps us writing the server
+in node js more easily and efficiently.
+
+2. What are middlewares?
+
+Answer: Middleware functions are functions that have access to the request object (req), the response object (res), and the next middleware function in the application's request-response cycle. 
+These functions are used to modify req and res objects for tasks like parsing request bodies, adding response headers, etc.
+
+3. What is next used for?
+
+Answer: next is used to keep the request continue for the next middlewares.
+
+4. Why res.send() is used for?
+
+Answer: The res. send function sets the content type to text/Html which means that the client will now treat it as text. 
+It then returns the response to the client.
+
+5. If i do res.send('<h1> hello to node js </h1>') . What will be the content-type header equal to.
+
+Answer: The content type will be set to text/html.
+
+
+6. If I do res.send( { key1: value }) . What will be the content-type header equal to.
+
+Answer: It will throw an error, but if it passed like res.send({"key1":"value"}) then the header
+will be application/json
+
+
+7. What does app.listen(3000) do behind the scenes?
+
+Answer: app.listen(3000) creates the server itself using http.createServer(app) method and also
+keeps listning for any request made on port 3000.
