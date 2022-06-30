@@ -3,9 +3,10 @@
 const http = require('http');
 
 const rqListener = (req,res)=>{
-    console.log('Sutirtha Dey');
+    const text = 'Hello World';
+    const message = text.split(' ')[1];
     res.write(`<html>`);
-    res.write(`<body><h1>Hi</h1></body>`)
+    res.write(`<body><h1>${message}</h1></body>`)
     res.write(`</html>`);
 }
 
