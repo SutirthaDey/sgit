@@ -1,0 +1,8 @@
+event loop takes care of the javascript asynchronous code, basically javascript is a single threaded 
+programming language. When any asynchronous is encountered, the code is thrown to certain portion of 
+memory which is different from the javascript execution, and attached a event listener with it.
+Whenever the event occurs, the callback functiona associated with it comes to the callback queue and
+event loop takes care of these functions, it brings the callback function one by one to the call stack
+and executes it. Thus as long as any event listener is there in the code, the event loop waits for 
+any event to happen, after it happens it brings the function to call stack and loop goes on. When there
+is no event is there, the program gets terminated.
