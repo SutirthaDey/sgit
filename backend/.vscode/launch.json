@@ -13,7 +13,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/2. Express Framework/2. Intro to middlewares/add_product.js",
+            "program": "${workspaceFolder}2. Express Framework/5. Serving HTML,CSS as files/server.js",
             "restart": true,
             "runtimeExecutable": "nodemon",
             "console": "integratedTerminal"
