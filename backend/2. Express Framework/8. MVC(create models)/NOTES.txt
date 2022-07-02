@@ -1,0 +1,13 @@
+1. Models are basically objects or the part of our code that represents data that to be used by 
+the whole code, it's allows us to do the things like saving data, fetching data to or from a file.
+
+
+2. Views are responsible for what users sees in the browser, the are responsible for rendering the right content to users.
+Controllers are the in-between views are models, which basically works with both to keep them in sync. 
+Views doesn't care about application logic, models does. 
+
+
+3. Controller triggers the process of saving the data according to desired logic and also getting 
+the data from models and passing them to views. So it's basically the logic part we write in routes, 
+so we can create a controller folder and keep the logic of routing in there, 
+that makes the code more cleaner.
