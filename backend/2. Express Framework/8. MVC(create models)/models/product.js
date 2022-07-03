@@ -1,7 +1,16 @@
 // array to store the products
-const products = [];
 const fs = require('fs');
-const os = require('os');
+const path = require('path');
+const p = path.join(path.dirname(process.mainModule.filename),'data','products.json');
+
+const readProducts = (callback)=>{
+    fs.readFile(p,(err,data)=>{
+        if(err)
+         callback([]);
+        else
+         callback(JSON.parse(data));
+    })
+}
 
 // This class will create product objects
 module.exports = class Product{
@@ -11,11 +20,16 @@ module.exports = class Product{
 
     // class method to save each object
     save(){
-        products.push(this);
+        readProducts((products)=>{
+            products.push(this);
+            fs.writeFile(p,JSON.stringify(products),(err)=>{
+                console.log(err);
+            })
+        })
     }
 
     //function to fetch all objects
-    static fetchAll(){
-        return products;
+    static fetchAll(callback){
+        readProducts(callback);
     }
 }
