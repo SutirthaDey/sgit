@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 //start the mysql server before starting server
-const db = require('../util/database'); // require util
+const db = require('./util/database'); // require .util/database
 
 const errorController = require('./controllers/error');
 
