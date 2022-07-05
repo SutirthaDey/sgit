@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 #database file
-util/dummy.js
+util/d.js
