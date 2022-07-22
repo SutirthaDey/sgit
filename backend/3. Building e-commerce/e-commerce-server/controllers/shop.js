@@ -7,11 +7,6 @@ exports.getProducts = (req, res, next) => {
   Product.findAll()
   .then((products)=>{
     res.json({products});
-    // res.render('shop/product-list', {
-    //       prods: products,
-    //       pageTitle: 'All Products',
-    //       path: '/products'
-    //     });
   })
   .catch((err)=> console.log(err));
 };
@@ -52,7 +47,7 @@ exports.getIndex = (req, res, next) => {
 // for adding the element to cart 
 // (redirecting to '/' for now, will be modified)
 exports.addToCart = (req,res,next)=>{
-  const productId = req.body.productId;
+  const productId = req.body.prodId;
   let fetchedCart;
   let newQuantity = 1;
 
@@ -92,11 +87,12 @@ exports.getCart = (req, res, next) => {
       return cart
       .getProducts()
       .then(products => {
-          res.render('shop/cart', {
-            products: products,
-            path: '/cart',
-            pageTitle: 'Your Cart'
-          });
+          res.json(products);
+          // res.render('shop/cart', {
+          //   products: products,
+          //   path: '/cart',
+          //   pageTitle: 'Your Cart'
+          // });
        })
        .catch(err=>console.log(err));
     })
@@ -104,19 +100,24 @@ exports.getCart = (req, res, next) => {
 };
 
 exports.postCartDelete = (req,res,next)=>{
- const productId = req.body.productId;
+ const productId = req.body.prodId;
+ console.log(`${productId} in postCart1`);
  
  req.user
  .getCart()
  .then(cart=>{
+   console.log(`${productId} in postCart2`);
    return cart.getProducts({where: {id:productId}})
  })
  .then((products)=>{
+  console.log(`${productId} in postCart3`);
   const product = products[0];
 
   return product.cartItem.destroy();
  })
- .then(()=>res.redirect('/cart'))
+ .then((r)=> {
+  console.log(`${productId} in postCart4`);
+  res.json(r)})
  .catch((err)=>console.log(err));
 }
 

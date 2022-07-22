@@ -22,7 +22,11 @@ const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
 
 app.use(cors())
+
+//urlencoded plus json encoded
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ extended: false }));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // This middleware adding the user from db to the req object everytime any
