@@ -213,31 +213,7 @@ parentContainer.addEventListener('click',(e)=>{
         const prodId = document.querySelector(`#${id} input`).value;
 
         axios.post('http://localhost:3000/cart',{prodId:prodId})
-        .then((res)=>console.log(res));
-
-        let total_cart_price = document.querySelector('#total-value').innerText;
-        document.querySelector('.cart-number').innerText = parseInt(document.querySelector('.cart-number').innerText)+1
-        const cart_item = document.createElement('div');
-        cart_item.classList.add('cart-row');
-        total_cart_price = parseFloat(total_cart_price) + parseFloat(price)
-        total_cart_price = total_cart_price.toFixed(2)
-        document.querySelector('#total-value').innerText = `${total_cart_price}`;
-        cart_item.setAttribute('id',`in-cart-${id}`);
-        cart_item.innerHTML = `
-        <span class='cart-item cart-column'>
-        <img class='cart-img' src="${img_src}" alt="">
-            <span>${name}</span>
-        </span>
-        <span class='cart-price cart-column'>${price}</span>
-        <span class='cart-quantity cart-column'>
-            <input type="text" value="1">
-            <button>REMOVE</button>
-        </span>`
-        const productId = document.createElement('input');
-        productId.setAttribute('type','hidden');
-        productId.value = prodId;
-        cart_item.appendChild(productId);
-        cart_items.appendChild(cart_item)
+        .then((res)=> getCart(1));
 
         const container = document.getElementById('container');
         const notification = document.createElement('div');
@@ -271,11 +247,6 @@ parentContainer.addEventListener('click',(e)=>{
 
         axios.post('http://localhost:3000/cart-delete-item',{prodId:prodId})
         .then(()=>{
-            // let total_cart_price = document.querySelector('#total-value').innerText;
-            // total_cart_price = parseFloat(total_cart_price).toFixed(2) - parseFloat(document.querySelector(`#${e.target.parentNode.parentNode.id} .cart-price`).innerText).toFixed(2) ;
-            // document.querySelector('.cart-number').innerText = parseInt(document.querySelector('.cart-number').innerText)-1
-            // document.querySelector('#total-value').innerText = `${total_cart_price.toFixed(2)}`
-            // e.target.parentNode.parentNode.remove();
             getCart(1);
         })
         .catch((err)=>console.log(err));
@@ -294,5 +265,3 @@ window.addEventListener('DOMContentLoaded',(e)=>{
     getCart(currentCart);
 });
 
-
-// when add to cart or remove then need to get the cart accordingly from db
