@@ -26,12 +26,12 @@ function createCartItem(name,img_src,price,prodId){
     <span class='cart-item cart-column'>
     <img class='cart-img' src="${img_src}" alt="">
         <span>${name}</span>
-</span>
-<span class='cart-price cart-column'>${price}</span>
-<span class='cart-quantity cart-column'>
-    <input type="text" value="1">
-    <button>REMOVE</button>
-</span>`
+    </span>
+    <span class='cart-price cart-column'>${price}</span>
+    <span class='cart-quantity cart-column'>
+        <input type="text" value="1">
+        <button>REMOVE</button>
+    </span>`
     const productId = document.createElement('input');
     productId.setAttribute('type','hidden');
     productId.value = prodId;
@@ -40,7 +40,8 @@ function createCartItem(name,img_src,price,prodId){
 }
 
 function showCartItems(items){
-    cartPages.innerHTML='';
+    cart_items.innerHTML = '';
+    cartPages.innerHTML = '';
 
     items.forEach(({title,imageUrl,price,id})=>{
         createCartItem(title,imageUrl,price,id);
@@ -95,7 +96,7 @@ products.forEach((product)=>{
 })
 }
 
-function getProducts(currentPage,currentCart){
+function getProducts(currentPage){
     axios.get(`http://localhost:3000/products?page=${currentPage}`)
     .then((res)=>{
         const {totalItems,hasNextPage,lastPage} = res.data;
@@ -104,9 +105,13 @@ function getProducts(currentPage,currentCart){
         const pages = document.getElementById('pagination');
         createPageButtons(pages,totalItems,currentPage,hasNextPage,lastPage);
     });
+}
+
+function getCart(currentCart){
     axios.get(`http://localhost:3000/cart?cart=${currentCart}`)
     .then((res)=>{
         const {totalCartItems,hasNextCart,lastCart} = res.data;
+        document.querySelector('#total-value').innerText = '0';
         showCartItems(res.data.products);
         const pages = document.getElementById('cart-pagination');
         document.querySelector('.cart-number').innerText = totalCartItems;
@@ -117,8 +122,11 @@ function getProducts(currentPage,currentCart){
 // Added pagination for products
 function createPageButtons(pages,totalItems,currentPage,hasNextPage,lastPage){
   const firstPageButton = document.createElement('button');
+  firstPageButton.setAttribute('type','button');
   const currentPageButton = document.createElement('button');
+  currentPageButton.setAttribute('type','button');
   const lastPageButton = document.createElement('button');
+  lastPageButton.setAttribute('type','button');
 
   firstPageButton.innerText = '1';
   lastPageButton.innerText = `${lastPage}`;
@@ -139,6 +147,7 @@ function createPageButtons(pages,totalItems,currentPage,hasNextPage,lastPage){
   if(currentPage > 2)
   {
     const previousPageButton = document.createElement('button');
+    previousPageButton.setAttribute('type','button');
     previousPageButton.innerText = currentPage - 1;
     previousPageButton.classList.add('page-button');
     pages.appendChild(previousPageButton);
@@ -150,6 +159,7 @@ function createPageButtons(pages,totalItems,currentPage,hasNextPage,lastPage){
 
   if(hasNextPage && currentPage+1 != lastPage){
     const nextPageButton = document.createElement('button');
+    nextPageButton.setAttribute('type','button');
     nextPageButton.innerText = currentPage + 1;
     nextPageButton.classList.add('page-button');
     pages.appendChild(nextPageButton);
@@ -159,20 +169,33 @@ function createPageButtons(pages,totalItems,currentPage,hasNextPage,lastPage){
   lastPageButton.classList.add('active');
   }
 
-  if(lastPage !== 1)
+  if(lastPage !== 1){
+  lastPageButton.setAttribute('type','button');
   pages.appendChild(lastPageButton);
+  }
 
 }
 
 function setQueryParams(e,query){
 
     if(e.target.className === 'page-button'){
-        const currentPage = +e.target.innerText;
-        const urlParams = new URLSearchParams(document.location.search);
-        urlParams.set(query, currentPage);
+        const target = +e.target.innerText;
 
-        document.location.search = urlParams;
-        getProducts(currentPage);
+        console.log(e.target);
+
+        if (history.pushState) {
+            let newUrl;
+            if(query === 'page'){
+                newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?${query}=${target}`;
+                getProducts(target);
+            }
+            else{
+                console.log('90');
+                newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?${query}=${target}`; 
+                getCart(target);
+            }
+            window.history.pushState({path:newUrl},'',newUrl);
+        }
     }
 }
 
@@ -204,12 +227,12 @@ parentContainer.addEventListener('click',(e)=>{
         <span class='cart-item cart-column'>
         <img class='cart-img' src="${img_src}" alt="">
             <span>${name}</span>
-    </span>
-    <span class='cart-price cart-column'>${price}</span>
-    <span class='cart-quantity cart-column'>
-        <input type="text" value="1">
-        <button>REMOVE</button>
-    </span>`
+        </span>
+        <span class='cart-price cart-column'>${price}</span>
+        <span class='cart-quantity cart-column'>
+            <input type="text" value="1">
+            <button>REMOVE</button>
+        </span>`
         const productId = document.createElement('input');
         productId.setAttribute('type','hidden');
         productId.value = prodId;
@@ -248,11 +271,12 @@ parentContainer.addEventListener('click',(e)=>{
 
         axios.post('http://localhost:3000/cart-delete-item',{prodId:prodId})
         .then(()=>{
-            let total_cart_price = document.querySelector('#total-value').innerText;
-            total_cart_price = parseFloat(total_cart_price).toFixed(2) - parseFloat(document.querySelector(`#${e.target.parentNode.parentNode.id} .cart-price`).innerText).toFixed(2) ;
-            document.querySelector('.cart-number').innerText = parseInt(document.querySelector('.cart-number').innerText)-1
-            document.querySelector('#total-value').innerText = `${total_cart_price.toFixed(2)}`
-            e.target.parentNode.parentNode.remove();
+            // let total_cart_price = document.querySelector('#total-value').innerText;
+            // total_cart_price = parseFloat(total_cart_price).toFixed(2) - parseFloat(document.querySelector(`#${e.target.parentNode.parentNode.id} .cart-price`).innerText).toFixed(2) ;
+            // document.querySelector('.cart-number').innerText = parseInt(document.querySelector('.cart-number').innerText)-1
+            // document.querySelector('#total-value').innerText = `${total_cart_price.toFixed(2)}`
+            // e.target.parentNode.parentNode.remove();
+            getCart(1);
         })
         .catch((err)=>console.log(err));
     }
@@ -266,7 +290,8 @@ window.addEventListener('DOMContentLoaded',(e)=>{
     let params = (new URL(document.location)).searchParams;
     let currentPage = +params.get("page") || 1;
     let currentCart = +params.get("cart") || 1;
-    getProducts(currentPage,currentCart);
+    getProducts(currentPage);
+    getCart(currentCart);
 });
 
 
