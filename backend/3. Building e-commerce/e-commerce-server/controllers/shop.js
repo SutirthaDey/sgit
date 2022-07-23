@@ -1,12 +1,29 @@
 const Cart = require('../models/cart');
 const Product = require('../models/product');
 
+let itemsPerPage = 2;
+let cartItemsPerPage = 2;
+let totalItems;
+let totalCartItems;
+
 exports.getProducts = (req, res, next) => {
+  const currentPage = req.query.page || 1;
+  const hasNextPage = (currentPage*itemsPerPage) < totalItems ? true : false;
+  let lastPage;
 
   // getting products using sequelize
-  Product.findAll()
+  Product
+  .count()
+  .then(count=> {
+    totalItems = count;
+    lastPage = Math.ceil(totalItems/itemsPerPage);
+    return Product.findAll({
+      limit: itemsPerPage,
+      offset: (currentPage-1)*itemsPerPage
+    })
+  })
   .then((products)=>{
-    res.json({products});
+    res.json({products,totalItems,currentPage,hasNextPage,lastPage});
   })
   .catch((err)=> console.log(err));
 };
@@ -81,18 +98,33 @@ exports.addToCart = (req,res,next)=>{
 }
 
 exports.getCart = (req, res, next) => {
+  let fetchedCart;
+  const currentCart = req.query.cart || 1;
+  const hasNextCart = (currentCart*cartItemsPerPage) < totalCartItems ? true : false;
+  let lastCart;
   req.user
     .getCart()
     .then((cart)=>{
+      fetchedCart = cart;
       return cart
       .getProducts()
       .then(products => {
-          res.json(products);
+          totalCartItems = products.length;
+          lastCart = Math.ceil(totalCartItems/cartItemsPerPage);
+          return fetchedCart
+          .getProducts({
+            limit: cartItemsPerPage,
+            offset: (currentCart-1)*cartItemsPerPage
+          })
+          .then((products)=>{
+            res.json({products,totalCartItems,currentCart,hasNextCart,lastCart});
           // res.render('shop/cart', {
           //   products: products,
           //   path: '/cart',
           //   pageTitle: 'Your Cart'
           // });
+          })
+
        })
        .catch(err=>console.log(err));
     })
