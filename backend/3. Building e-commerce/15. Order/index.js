@@ -7,6 +7,8 @@ const productPages = document.getElementById('pagination');
 const cartPages = document.getElementById('cart-pagination');
 const parentContainer = document.getElementById('EcommerceContainer');
 
+/*  for products and cart pages  */
+
 function createCartItem(name,img_src,price,prodId){
     const id = name.split(' ')[0]+prodId;
     if (document.querySelector(`#in-cart-${id}`)){
@@ -31,7 +33,6 @@ function createCartItem(name,img_src,price,prodId){
     <span class='cart-quantity cart-column'>
         <input type="text" value="1">
         <button>REMOVE</button>
-        <button class="order">ORDER</button>
     </span>`
     const productId = document.createElement('input');
     productId.setAttribute('type','hidden');
@@ -196,7 +197,18 @@ function setQueryParams(e,query){
     }
 }
 
-parentContainer.addEventListener('click',(e)=>{
+function showToastNotification(message){
+    const container = document.getElementById('container');
+    const notification = document.createElement('div');
+    notification.classList.add('notification');
+    notification.innerHTML = message;
+    container.appendChild(notification);
+    setTimeout(()=>{
+    notification.remove();
+    },2500)
+}
+
+function parentContainerHelper(e){
 
     if (e.target.className=='shop-item-button'){
         const id = e.target.parentNode.parentNode.id;
@@ -212,14 +224,7 @@ parentContainer.addEventListener('click',(e)=>{
         axios.post('http://localhost:3000/cart',{prodId:prodId})
         .then((res)=> getCart(1));
 
-        const container = document.getElementById('container');
-        const notification = document.createElement('div');
-        notification.classList.add('notification');
-        notification.innerHTML = `<h4>Your Product : <span>${name}</span> is added to the cart<h4>`;
-        container.appendChild(notification);
-        setTimeout(()=>{
-        notification.remove();
-        },2500)
+        showToastNotification(`<h4>Your Product : <span>${name}</span> is added to the cart<h4>`);
     }
     if (e.target.className=='cart-btn-bottom' || e.target.className=='cart-bottom' || e.target.className=='cart-holder'){
         document.querySelector('#cart').style = "display:block;"
@@ -232,10 +237,17 @@ parentContainer.addEventListener('click',(e)=>{
             alert('You have Nothing in Cart , Add some products to purchase !');
             return
         }
-        alert('Thanks for the purchase')
-        cart_items.innerHTML = ""
-        document.querySelector('.cart-number').innerText = 0
-        document.querySelector('#total-value').innerText = `0`;
+
+        axios.post('http://localhost:3000/orders')
+        .then((order)=>{
+            const orderId = order.data;
+
+            cart_items.innerHTML = ""
+            document.querySelector('.cart-number').innerText = 0
+            document.querySelector('#total-value').innerText = `0`;
+            console.log(orderId);
+            showToastNotification(`<h4>Your Order is Placed. : Order-id is :<span>${orderId}</span> <h4>`)
+        })
     }
 
     if (e.target.innerText=='REMOVE'){
@@ -248,17 +260,64 @@ parentContainer.addEventListener('click',(e)=>{
         })
         .catch((err)=>console.log(err));
     }
-})
+}
 
-productPages.addEventListener('click',(e)=> setQueryParams(e,'page'));
 
-cartPages.addEventListener('click',(e)=> setQueryParams(e,'cart'));
+/* for orders page */
+
+function createOrderItems({id,products}){
+ const orderDiv = document.getElementById('orders');
+ 
+ products.forEach(({title,imageUrl,price})=> {
+    const orderRow = document.createElement('div');
+    orderRow.classList.add('order-row');
+
+    orderRow.innerHTML = `<span class='order-item order-column'>
+    <img class='order-img' src="${imageUrl}" alt="">
+    <span>${title}</span>
+    </span>
+    <span class='order-price order-column'>$${price}</span>
+    <span class='order-id order-column'>
+    <span>${id}</span>
+    </span>`
+ 
+    orderDiv.appendChild(orderRow);
+ })
+}
+
+function showOrders(orders){
+    orders.forEach((order)=>{
+        createOrderItems(order);
+    })
+}
+
+function getOrders(){
+    axios.get('http://localhost:3000/orders')
+    .then((orders)=>{
+        showOrders(orders.data);
+    })
+}
+
 
 window.addEventListener('DOMContentLoaded',(e)=>{
     let params = (new URL(document.location)).searchParams;
     let currentPage = +params.get("page") || 1;
     let currentCart = +params.get("cart") || 1;
-    getProducts(currentPage);
-    getCart(currentCart);
+
+    const href = window.location.href.split('/');
+    const endPoint = href[href.length-1];
+
+    if(endPoint.startsWith('dynamicstore.html',0)){
+        getProducts(currentPage);
+        getCart(currentCart);
+
+        productPages.addEventListener('click',(e)=> setQueryParams(e,'page'));
+        cartPages.addEventListener('click',(e)=> setQueryParams(e,'cart'));
+        parentContainer.addEventListener('click', parentContainerHelper)
+    }
+    else if(endPoint.startsWith('orders.html',0)){
+        getOrders();
+    }
 });
+
 

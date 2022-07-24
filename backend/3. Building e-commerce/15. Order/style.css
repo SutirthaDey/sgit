@@ -184,29 +184,29 @@ section h2{
     border-radius: 4%;
     background: #56CCF2;
 }
-.cart-row{
+.cart-row, .order-row{
     font-size:18px;
     display:flex;
 }
-.cart-header{
+.cart-header, .order-header{
     font-size:1.2rem;
     font-weight: bold;
 }
-.cart-item{
+.cart-item, .order-item{
     width:45%;
 }
-.cart-img{
+.cart-img, .order-img{
     width:80px;
     border-radius:8%;
     margin-right:20px;
 }
-.cart-price{
+.cart-price, .order-price{
     width:20%;
 }
-.cart-quantity{
+.cart-quantity, .order-id{
     width:35%;
 }
-.cart-column{
+.cart-column, .order-column{
     display: flex;
     align-items: center;
     border-bottom: 1px solid black;

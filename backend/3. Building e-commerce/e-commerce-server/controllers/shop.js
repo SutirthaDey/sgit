@@ -1,5 +1,6 @@
 const Cart = require('../models/cart');
 const OrderDetails = require('../models/order-details');
+const Order = require('../models/order');
 const Product = require('../models/product');
 
 let itemsPerPage = 2;
@@ -154,14 +155,43 @@ exports.postCartDelete = (req,res,next)=>{
  .catch((err)=>console.log(err));
 }
 
-exports.getOrders = (req, res, next) => {
-  res.render('shop/orders', {
-    path: '/orders',
-    pageTitle: 'Your Orders'
+exports.getOrders = async(req, res, next) => {
+
+  const orders = await req.user.getOrders({include: ['products']});
+  const orderDetails = orders.map(order=> {
+    return {id:order.id,products: order.products}
   });
+  const cart = await req.user.getCart();
+  await cart.setProducts(null);
+
+  res.json(orderDetails);
 };
 
 exports.postOrders = (req, res, next) =>{
+  let productsToBeAdded;
+  let orderId;
+  req.user
+  .getCart()
+  .then((cart)=>{
+    return cart.getProducts();
+  })
+  .then((products)=>{
+    productsToBeAdded = products;
+    return req.user.createOrder();
+  })
+  .then((order)=>{
+    orderId = order.id;
+    return order.addProducts(productsToBeAdded);
+  })
+  .then(()=>{
+    productsToBeAdded.forEach(product => {
+      product.cartItem.destroy();
+    });
+  })
+  .then(()=>{
+    res.json(orderId);
+  })
+  .catch((error)=>console.log(error));
 }
 
 exports.getCheckout = (req, res, next) => {
