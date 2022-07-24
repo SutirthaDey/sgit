@@ -1,4 +1,5 @@
 const Cart = require('../models/cart');
+const OrderDetails = require('../models/order-details');
 const Product = require('../models/product');
 
 let itemsPerPage = 2;
@@ -159,6 +160,9 @@ exports.getOrders = (req, res, next) => {
     pageTitle: 'Your Orders'
   });
 };
+
+exports.postOrders = (req, res, next) =>{
+}
 
 exports.getCheckout = (req, res, next) => {
   res.render('shop/checkout', {

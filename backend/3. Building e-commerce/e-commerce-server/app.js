@@ -20,6 +20,8 @@ const Product = require('./models/product');
 const User = require('./models/user');
 const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const OrderDetails = require('./models/order-details');
 
 app.use(cors())
 
@@ -56,6 +58,15 @@ Cart.belongsTo(User);
 // many to many between cart and product
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+
+// one to many between user to order
+User.hasMany(Order);
+Order.belongsTo(User);
+
+// Many to many between user and ordered-product
+
+Order.belongsToMany(Product, {through: OrderDetails});
+Product.belongsToMany(Order, {through: OrderDetails});
 
 // force: true added for force change and overwrite
 // creating one dummy user 

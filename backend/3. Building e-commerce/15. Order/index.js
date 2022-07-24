@@ -248,13 +248,6 @@ parentContainer.addEventListener('click',(e)=>{
         })
         .catch((err)=>console.log(err));
     }
-
-    if (e.target.innerText=='ORDER'){
-        const id = e.target.parentNode.parentNode.id;
-        const prodId = document.querySelectorAll(`#${id} input`)[1].value;
-
-        console.log(id,prodId);
-    }
 })
 
 productPages.addEventListener('click',(e)=> setQueryParams(e,'page'));
